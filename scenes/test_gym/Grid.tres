@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://bqdyfxlf2hehf"]
+
+[ext_resource type="Texture2D" uid="uid://bjhrfwkpvec8t" path="res://scenes/test_gym/_1m x 1m.png" id="1_vs3ud"]
+
+[resource]
+resource_name = "Grid"
+cull_mode = 2
+albedo_texture = ExtResource("1_vs3ud")

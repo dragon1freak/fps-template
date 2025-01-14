@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=3 uid="uid://6e7a6fxxgkaj"]
+
+[ext_resource type="PackedScene" uid="uid://clgbxao7515tt" path="res://scenes/player/player.tscn" id="1_mw6o0"]
+[ext_resource type="PackedScene" uid="uid://cbrkg2m8mfnj4" path="res://scenes/test_gym/test_gym.glb" id="2_kwbyb"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ynu4r"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_85lb1"]
+sky_material = SubResource("ProceduralSkyMaterial_ynu4r")
+
+[sub_resource type="Environment" id="Environment_rkrmi"]
+background_mode = 2
+sky = SubResource("Sky_85lb1")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="TestGym" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_rkrmi")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Player" parent="." instance=ExtResource("1_mw6o0")]
+
+[node name="test_gym" parent="." instance=ExtResource("2_kwbyb")]

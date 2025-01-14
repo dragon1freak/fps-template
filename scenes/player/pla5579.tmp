@@ -1,0 +1,76 @@
+[gd_scene load_steps=11 format=3 uid="uid://clgbxao7515tt"]
+
+[ext_resource type="Script" path="res://scenes/player/player.gd" id="1_ah64t"]
+[ext_resource type="Script" path="res://scripts/stat_block.gd" id="2_46c7b"]
+[ext_resource type="Script" path="res://scripts/FSM/state_machine.gd" id="2_qhsxl"]
+[ext_resource type="Script" path="res://scenes/player/states/idle.gd" id="4_sd7vf"]
+[ext_resource type="Script" path="res://scenes/player/interactor.gd" id="5_21qci"]
+[ext_resource type="Script" path="res://scenes/player/states/run.gd" id="5_rmbbx"]
+[ext_resource type="Script" path="res://scenes/player/states/jump.gd" id="6_5jj8m"]
+[ext_resource type="Script" path="res://scenes/player/states/fall.gd" id="7_5a0et"]
+
+[sub_resource type="Resource" id="Resource_ytgok"]
+script = ExtResource("2_46c7b")
+health = 10
+speed = 8
+stamina = 10
+mana = 10
+health_regen = 0
+stamina_regen = 1.0
+mana_regen = 1.0
+gravity = 20.0
+jump_strength = 8.0
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8sa0i"]
+
+[node name="Player" type="CharacterBody3D" groups=["player"]]
+script = ExtResource("1_ah64t")
+stat_block = SubResource("Resource_ytgok")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_8sa0i")
+
+[node name="Pivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+
+[node name="Interactor" type="RayCast3D" parent="Pivot"]
+target_position = Vector3(0, 0, -1.5)
+script = ExtResource("5_21qci")
+
+[node name="MainCamera" type="Camera3D" parent="Pivot"]
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Pivot/MainCamera"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="Pivot/MainCamera/SubViewportContainer"]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="NoClipCamera" type="Camera3D" parent="Pivot/MainCamera/SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+cull_mask = 2
+
+[node name="MovementState" type="Node" parent="." node_paths=PackedStringArray("state_target", "initial_state")]
+script = ExtResource("2_qhsxl")
+state_target = NodePath("..")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="MovementState"]
+script = ExtResource("4_sd7vf")
+
+[node name="Run" type="Node" parent="MovementState"]
+script = ExtResource("5_rmbbx")
+
+[node name="Jump" type="Node" parent="MovementState"]
+script = ExtResource("6_5jj8m")
+
+[node name="Fall" type="Node" parent="MovementState"]
+script = ExtResource("7_5a0et")

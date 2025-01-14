@@ -1,0 +1,529 @@
+[gd_scene load_steps=30 format=3 uid="uid://b14qyfe2o7x5v"]
+
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_ah64t"]
+[ext_resource type="Resource" uid="uid://bayh1x8xs4rn2" path="res://scenes/player/player_statblock.tres" id="2_7vnhj"]
+[ext_resource type="Script" path="res://scripts/FSM/state_machine.gd" id="2_qhsxl"]
+[ext_resource type="Script" path="res://resources/move_resource.gd" id="3_4ax7n"]
+[ext_resource type="Script" path="res://scenes/player/normal_state.gd" id="3_wrj8c"]
+[ext_resource type="PackedScene" uid="uid://danxqkp80mupb" path="res://models/sword_rare.gltf.glb" id="3_ymo0k"]
+[ext_resource type="Script" path="res://resources/moveset.gd" id="4_ddpxf"]
+[ext_resource type="Script" path="res://AutoFootStepsPlugin/AutoFootSteps.gd" id="5_nwxsj"]
+[ext_resource type="Resource" uid="uid://badwdqtfuxraf" path="res://AutoFootStepsPlugin/DefaultSounds/ShoeFootProfile.tres" id="6_s2nvc"]
+[ext_resource type="Script" path="res://scenes/player/blocking_state.gd" id="8_ela21"]
+[ext_resource type="Script" path="res://scenes/player/light_attack_state.gd" id="9_barhh"]
+[ext_resource type="Script" path="res://scenes/player/heavy_attack_state.gd" id="10_156km"]
+
+[sub_resource type="Resource" id="Resource_8ugah"]
+script = ExtResource("3_4ax7n")
+name = "light_attack"
+animation_name = "LightAttack"
+animation_speed = 1.0
+move_range = 10.0
+damage = 1.0
+stamina_cost = 1.0
+mana_cost = 1.0
+health_cost = 0.0
+
+[sub_resource type="Resource" id="Resource_8riml"]
+script = ExtResource("3_4ax7n")
+name = "heavy_attack"
+animation_name = "HeavyAttack"
+animation_speed = 1.0
+move_range = 10.0
+damage = 3.0
+stamina_cost = 1.0
+mana_cost = 1.0
+health_cost = 0.0
+
+[sub_resource type="Resource" id="Resource_81tw3"]
+script = ExtResource("4_ddpxf")
+moves = Array[ExtResource("3_4ax7n")]([SubResource("Resource_8ugah"), SubResource("Resource_8riml")])
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_wcnxb"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ry0yf"]
+size = Vector3(0.394409, 1.90122, 0.209961)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e0nuo"]
+transparency = 1
+cull_mode = 1
+albedo_color = Color(1, 0, 1, 0)
+
+[sub_resource type="Animation" id="Animation_am7qy"]
+resource_name = "Idle"
+length = 4.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pivot/RightHandPivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Pivot/RightHandPivot/sword_rare_gltf:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(-2, -2),
+"update": 0,
+"values": [Vector3(0, 1.71391, -0.0523599), Vector3(0, 1.79245, -0.0785398)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Pivot/RightHandPivot/sword_rare_gltf:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(-2, -2),
+"update": 0,
+"values": [Vector3(0.564339, -0.543023, -0.628297), Vector3(0.564, -0.597, -0.628)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("MeshInstance3D:surface_material_override/0")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("StandardMaterial3D_e0nuo")]
+}
+
+[sub_resource type="Animation" id="Animation_ot2qe"]
+resource_name = "LightAttack"
+length = 0.2
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pivot/RightHandPivot/sword_rare_gltf:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.19, 0.2),
+"transitions": PackedFloat32Array(-2, -2, 0),
+"update": 0,
+"values": [Vector3(0.564, -0.25, 0), Vector3(0.564, -0.25, 0), Vector3(0.564, -1.37823, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Pivot/RightHandPivot/sword_rare_gltf:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.19, 0.2),
+"transitions": PackedFloat32Array(-2, -2, 0),
+"update": 0,
+"values": [Vector3(1.5708, -3.14159, 1.5708), Vector3(1.5708, -3.14159, 1.5708), Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Pivot/RightHandPivot:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.19, 0.2),
+"transitions": PackedFloat32Array(-2, 1, 0),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 2.81714, 0), Vector3(0, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Pivot/RightHandPivot/sword_rare_gltf/HurtBox:monitoring")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.07, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_4tpmd"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pivot/RightHandPivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Pivot/RightHandPivot/sword_rare_gltf:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1.71391, -0.0523599)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Pivot/RightHandPivot/sword_rare_gltf:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.564339, -0.543023, -0.628297)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Pivot/RightHandPivot/sword_rare_gltf/HurtBox:monitoring")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("MeshInstance3D:surface_material_override/0:albedo_color")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 0, 1, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Pivot/RightHandPivot:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_s3gql"]
+resource_name = "StartBlock"
+length = 0.2
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:surface_material_override/0:albedo_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 0, 1, 0), Color(1, 0, 1, 0.235294)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Pivot/RightHandPivot:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(-2),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Pivot/RightHandPivot:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(-2, -2),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-0.261799, 0.261799, 7.71341e-09)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Pivot/RightHandPivot/sword_rare_gltf:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.564339, -0.543023, -0.628297)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Pivot/RightHandPivot/sword_rare_gltf:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1.71391, -0.0523599)]
+}
+
+[sub_resource type="Animation" id="Animation_q7ptc"]
+resource_name = "StopBlock"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:surface_material_override/0:albedo_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 0, 1, 0.235294), Color(1, 0, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Pivot/RightHandPivot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(-2, -2),
+"update": 0,
+"values": [Vector3(-0.261799, 0.261799, 7.71341e-09), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_8r17s"]
+resource_name = "Blocking"
+length = 6.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:surface_material_override/0:albedo_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 0, 1, 0.235294)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Pivot/RightHandPivot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 3, 6),
+"transitions": PackedFloat32Array(-2, -2, -2),
+"update": 0,
+"values": [Vector3(-0.261799, 0.261799, 7.71341e-09), Vector3(-0.226893, 0.314159, 0), Vector3(-0.261799, 0.261799, 7.71341e-09)]
+}
+
+[sub_resource type="Animation" id="Animation_lj7ft"]
+resource_name = "HeavyAttackStart"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pivot/RightHandPivot/sword_rare_gltf:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(-2, -2),
+"update": 0,
+"values": [Vector3(0, 1.71391, -0.0523599), Vector3(3.8097e-09, 1.65806, -1.5708)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Pivot/RightHandPivot/sword_rare_gltf:position")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(-2, -2),
+"update": 0,
+"values": [Vector3(0.564339, -0.543023, -0.628297), Vector3(0.585954, -0.295023, -0.218989)]
+}
+
+[sub_resource type="Animation" id="Animation_5dt6m"]
+resource_name = "HeavyAttackHold"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pivot/RightHandPivot/sword_rare_gltf:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(-2, -2),
+"update": 0,
+"values": [Vector3(0.585954, -0.295023, -0.218989), Vector3(0.591357, -0.295023, -0.157225)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Pivot/RightHandPivot/sword_rare_gltf:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(-2),
+"update": 0,
+"values": [Vector3(3.8097e-09, 1.65806, -1.5708)]
+}
+
+[sub_resource type="Animation" id="Animation_lgqjs"]
+resource_name = "HeavyAttack"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pivot/RightHandPivot/sword_rare_gltf:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.5, 1),
+"transitions": PackedFloat32Array(-2, -2, -2, -2, 1),
+"update": 0,
+"values": [Vector3(0.591357, -0.295023, -0.157225), Vector3(0.511124, -0.295023, -0.64266), Vector3(0.495077, -0.295023, -0.702547), Vector3(0.511124, -0.295023, -0.64266), Vector3(0.564339, -0.543023, -0.628297)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Pivot/RightHandPivot/sword_rare_gltf:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.5, 1),
+"transitions": PackedFloat32Array(-2, -2, -2, 1),
+"update": 0,
+"values": [Vector3(0, 1.5708, -1.5708), Vector3(1.13133e-08, 1.8326, -1.5708), Vector3(1.13133e-08, 1.8326, -1.5708), Vector3(0, 1.71391, -0.0523599)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Pivot/RightHandPivot/sword_rare_gltf/HurtBox:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_3ufnf"]
+_data = {
+"Blocking": SubResource("Animation_8r17s"),
+"HeavyAttack": SubResource("Animation_lgqjs"),
+"HeavyAttackHold": SubResource("Animation_5dt6m"),
+"HeavyAttackStart": SubResource("Animation_lj7ft"),
+"Idle": SubResource("Animation_am7qy"),
+"LightAttack": SubResource("Animation_ot2qe"),
+"RESET": SubResource("Animation_4tpmd"),
+"StartBlock": SubResource("Animation_s3gql"),
+"StopBlock": SubResource("Animation_q7ptc")
+}
+
+[sub_resource type="SphereMesh" id="SphereMesh_j3m8j"]
+radius = 1.5
+height = 3.0
+
+[node name="Player" type="CharacterBody3D" groups=["player"]]
+script = ExtResource("1_ah64t")
+stat_block = ExtResource("2_7vnhj")
+moveset = SubResource("Resource_81tw3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_wcnxb")
+
+[node name="Pivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Pivot"]
+current = true
+
+[node name="RightHandPivot" type="Node3D" parent="Pivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="sword_rare_gltf" parent="Pivot/RightHandPivot" instance=ExtResource("3_ymo0k")]
+transform = Transform3D(-0.0883064, -0.00462795, 0.613661, -0.0324482, 0.619149, 0, -0.612819, -0.0321165, -0.0884278, 0.564339, -0.543023, -0.628297)
+
+[node name="HurtBox" type="Area3D" parent="Pivot/RightHandPivot/sword_rare_gltf"]
+unique_name_in_owner = true
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pivot/RightHandPivot/sword_rare_gltf/HurtBox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00628662, 1.16946, 0.00341799)
+shape = SubResource("BoxShape3D_ry0yf")
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("state_target", "initial_state")]
+script = ExtResource("2_qhsxl")
+state_target = NodePath("..")
+initial_state = NodePath("Normal")
+
+[node name="Normal" type="Node" parent="StateMachine"]
+script = ExtResource("3_wrj8c")
+
+[node name="Blocking" type="Node" parent="StateMachine"]
+script = ExtResource("8_ela21")
+
+[node name="LightAttack" type="Node" parent="StateMachine"]
+script = ExtResource("9_barhh")
+
+[node name="HeavyAttack" type="Node" parent="StateMachine"]
+script = ExtResource("10_156km")
+
+[node name="AutoFootSteps" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
+script = ExtResource("5_nwxsj")
+foot_profile = ExtResource("6_s2nvc")
+walk_speed = 5.0
+run_speed = 10.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
+libraries = {
+"": SubResource("AnimationLibrary_3ufnf")
+}
+autoplay = "Idle"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("SphereMesh_j3m8j")
+surface_material_override/0 = SubResource("StandardMaterial3D_e0nuo")
