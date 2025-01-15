@@ -5,4 +5,4 @@ extends Camera3D
 
 
 func _physics_process(_delta: float) -> void:
-	self.transform = main_camera.transform
+	self.global_transform = main_camera.global_transform

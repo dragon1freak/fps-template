@@ -12,9 +12,13 @@ class_name PlayerClass
 
 @onready var pivot = $Pivot
 @onready var movement_state: StateMachine = $MovementState
+@onready var interactor: RayCast3D = %Interactor
 
 var rotation_target : Vector3
 var input_mouse : Vector2
+
+func _ready() -> void:
+	interactor.can_interact_changed.connect(_on_interact_change)
 
 func _physics_process(delta):
 	# Rotation
@@ -32,3 +36,7 @@ func damage(amount: int, dealer) -> void:
 
 func kill() -> void:
 	print("dead")
+
+
+func _on_interact_change(show: bool) -> void:
+	print(show)

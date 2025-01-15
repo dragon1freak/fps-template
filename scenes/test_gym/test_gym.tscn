@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://6e7a6fxxgkaj"]
+[gd_scene load_steps=12 format=3 uid="uid://6e7a6fxxgkaj"]
 
 [ext_resource type="PackedScene" uid="uid://clgbxao7515tt" path="res://scenes/player/player.tscn" id="1_mw6o0"]
 [ext_resource type="PackedScene" uid="uid://cbrkg2m8mfnj4" path="res://scenes/test_gym/test_gym.glb" id="2_kwbyb"]
+[ext_resource type="Script" path="res://scenes/test_gym/interact_test.gd" id="3_bcy0m"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ynu4r"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -16,6 +17,22 @@ sky = SubResource("Sky_85lb1")
 tonemap_mode = 2
 glow_enabled = true
 
+[sub_resource type="BoxMesh" id="BoxMesh_44f3x"]
+size = Vector3(0.395, 1, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jokb0"]
+size = Vector3(0.420898, 1, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yjehj"]
+size = Vector3(0.263184, 1.11719, 1.07227)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6sl7r"]
+albedo_color = Color(0.24, 0.088, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_b6j0t"]
+material = SubResource("StandardMaterial3D_6sl7r")
+size = Vector3(0.255, 1.1, 1.065)
+
 [node name="TestGym" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -23,9 +40,45 @@ environment = SubResource("Environment_rkrmi")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+layers = 3
 shadow_enabled = true
 
 [node name="Player" parent="." instance=ExtResource("1_mw6o0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.743404, 0, -3.47193)
 
 [node name="test_gym" parent="." instance=ExtResource("2_kwbyb")]
+
+[node name="Cube_4m" parent="test_gym" index="4"]
+sorting_use_aabb_center = false
+
+[node name="InteractTest" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.10734, 1.14934, -10.9901)
+collision_layer = 8
+script = ExtResource("3_bcy0m")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="InteractTest"]
+mesh = SubResource("BoxMesh_44f3x")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractTest"]
+shape = SubResource("BoxShape3D_jokb0")
+
+[node name="Label3D" type="Label3D" parent="InteractTest"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0.758864, 0)
+text = "Interact with me"
+
+[node name="Count" type="Label3D" parent="InteractTest"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.214041, 0.0394804, 0)
+text = "0"
+
+[node name="StaticBody3D" type="StaticBody3D" parent="InteractTest"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractTest/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0996995, 0, 0)
+shape = SubResource("BoxShape3D_yjehj")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="InteractTest/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0966082, 0, 0)
+mesh = SubResource("BoxMesh_b6j0t")
+skeleton = NodePath("../..")
+
+[editable path="test_gym"]
