@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://clgbxao7515tt"]
+[gd_scene load_steps=13 format=3 uid="uid://clgbxao7515tt"]
 
 [ext_resource type="Script" path="res://scenes/player/player.gd" id="1_ah64t"]
 [ext_resource type="Script" path="res://scripts/stat_block.gd" id="2_46c7b"]
 [ext_resource type="Script" path="res://scripts/FSM/state_machine.gd" id="2_qhsxl"]
+[ext_resource type="Script" path="res://scenes/player/no_clip_camera.gd" id="4_hy8vk"]
 [ext_resource type="Script" path="res://scenes/player/states/idle.gd" id="4_sd7vf"]
 [ext_resource type="Script" path="res://scenes/player/interactor.gd" id="5_21qci"]
 [ext_resource type="Script" path="res://scenes/player/states/run.gd" id="5_rmbbx"]
@@ -23,6 +24,8 @@ jump_strength = 8.0
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8sa0i"]
 
+[sub_resource type="BoxMesh" id="BoxMesh_r6f7c"]
+
 [node name="Player" type="CharacterBody3D" groups=["player"]]
 script = ExtResource("1_ah64t")
 jump_cancel_strength = 24.0
@@ -40,6 +43,7 @@ target_position = Vector3(0, 0, -1.5)
 script = ExtResource("5_21qci")
 
 [node name="MainCamera" type="Camera3D" parent="Pivot"]
+unique_name_in_owner = true
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="Pivot/MainCamera"]
 anchors_preset = 15
@@ -56,10 +60,18 @@ size = Vector2i(1152, 648)
 render_target_update_mode = 4
 
 [node name="NoClipCamera" type="Camera3D" parent="Pivot/MainCamera/SubViewportContainer/SubViewport"]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
 cull_mask = 2
+script = ExtResource("4_hy8vk")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Pivot/MainCamera/SubViewportContainer/SubViewport/NoClipCamera"]
+transform = Transform3D(0.32, 0, 0, 0, 0.32, 0, 0, 0, 0.32, 0.31, -0.36, -0.443)
+layers = 2
+mesh = SubResource("BoxMesh_r6f7c")
 
 [node name="MovementState" type="Node" parent="." node_paths=PackedStringArray("state_target", "initial_state")]
+unique_name_in_owner = true
 script = ExtResource("2_qhsxl")
 state_target = NodePath("..")
 initial_state = NodePath("Idle")

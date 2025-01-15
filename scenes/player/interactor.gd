@@ -1,43 +1,55 @@
 extends RayCast3D
 
 
-var colliding := false
+signal can_interact_changed(can_interact)
 
 
-func can_interact(target) -> bool:
-	var interactee = self.get_collider()
-	if interactee != null and interactee.has_method("interact"):
+var can_interact := false
+
+
+func check_can_interact(target) -> bool:
+	if target != null and target.has_method("interact"):
 		return true
-	else:
-		interactee = interactee.get_parent()
-		if interactee != null and interactee.has_method("interact"):
-			return true
 	return false
 
 
 func _physics_process(delta):
-	if not colliding and self.is_colliding():
-		colliding = true
-		#if can_interact(self.get_collider()):
-			#PlayerHud.toggle_pip_visibility(true)
-	elif colliding and not self.is_colliding():
-		colliding = false
-		#PlayerHud.toggle_pip_visibility(false)
-	elif colliding and self.is_colliding():
-		if not can_interact(self.get_collider()):
-			colliding = false
-			#PlayerHud.toggle_pip_visibility(false)
-		else:		
-			colliding = true
-			#if can_interact(self.get_collider()):
-				#PlayerHud.toggle_pip_visibility(true)
-		
-	if Input.is_action_just_pressed("interact"):
-		var interactee = self.get_collider()
-		if interactee != null:
-			if interactee.has_method("interact"):
-				interactee.interact()
-			else:
-				interactee = interactee.get_parent()
-				if interactee != null and interactee.has_method("interact"):
-					interactee.interact()
+	var interactee = self.get_collider()
+	
+	#if _is_colliding:
+		#if self.is_colliding():
+			#_is_colliding = check_can_interact(interactee)
+			#can_interact_changed.emit(check_can_interact(interactee))
+			#print("is and is")
+		#else:
+			#_is_colliding = false
+			#can_interact_changed.emit(false)	
+			#print("is and isnt")
+	#elif self.is_colliding():
+		#_is_colliding = true
+		#print("isnt and is")
+		#if check_can_interact(interactee):
+			#can_interact_changed.emit(true)
+	
+	if not can_interact and self.is_colliding():
+		print("not and is")
+		can_interact = true
+		if check_can_interact(interactee):
+			can_interact_changed.emit(true)
+	elif can_interact and not self.is_colliding():
+		print("is and not")
+		can_interact = false
+		can_interact_changed.emit(false)
+	elif can_interact and self.is_colliding():
+		if not check_can_interact(interactee):
+			print("stop")
+			can_interact = false
+			can_interact_changed.emit(false)
+		else:
+			print("show")
+			can_interact = true
+			if check_can_interact(interactee):
+				can_interact_changed.emit(true)
+	
+	if Input.is_action_just_pressed("interact") and can_interact:
+		interactee.interact()
