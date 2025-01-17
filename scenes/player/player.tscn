@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scenes/player/no_clip_camera.gd" id="4_hy8vk"]
 [ext_resource type="Script" path="res://scenes/player/states/idle.gd" id="4_sd7vf"]
 [ext_resource type="Script" path="res://scenes/player/interactor.gd" id="5_21qci"]
+[ext_resource type="PackedScene" uid="uid://bg2ujckow4hqh" path="res://blasterC.glb" id="5_g8ehu"]
 [ext_resource type="Script" path="res://scenes/player/states/run.gd" id="5_rmbbx"]
 [ext_resource type="Script" path="res://scenes/player/states/jump.gd" id="6_5jj8m"]
 [ext_resource type="Script" path="res://scenes/player/states/fall.gd" id="7_5a0et"]
@@ -14,22 +15,14 @@
 script = ExtResource("2_46c7b")
 health = 10
 speed = 8
-stamina = 10
-mana = 10
-health_regen = 0
-stamina_regen = 1.0
-mana_regen = 1.0
 gravity = 20.0
 jump_strength = 8.0
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8sa0i"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_r6f7c"]
-
 [node name="Player" type="CharacterBody3D" groups=["player"]]
 collision_layer = 16
 script = ExtResource("1_ah64t")
-jump_cancel_strength = 24.0
 stat_block = SubResource("Resource_ytgok")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -49,6 +42,7 @@ script = ExtResource("5_21qci")
 
 [node name="MainCamera" type="Camera3D" parent="Pivot"]
 unique_name_in_owner = true
+cull_mask = 1048573
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="Pivot/MainCamera"]
 anchors_preset = 15
@@ -68,12 +62,17 @@ render_target_update_mode = 4
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
 cull_mask = 2
+fov = 40.0
 script = ExtResource("4_hy8vk")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Pivot/MainCamera/SubViewportContainer/SubViewport/NoClipCamera"]
-transform = Transform3D(0.32, 0, 0, 0, 0.32, 0, 0, 0, 0.32, 0.31, -0.36, -0.443)
+[node name="Container" type="Node3D" parent="Pivot/MainCamera/SubViewportContainer/SubViewport/NoClipCamera"]
+unique_name_in_owner = true
+
+[node name="blasterC2" parent="Pivot/MainCamera/SubViewportContainer/SubViewport/NoClipCamera/Container" instance=ExtResource("5_g8ehu")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.324, -0.264, -0.929)
+
+[node name="blasterC" parent="Pivot/MainCamera/SubViewportContainer/SubViewport/NoClipCamera/Container/blasterC2" index="0"]
 layers = 2
-mesh = SubResource("BoxMesh_r6f7c")
 
 [node name="MovementState" type="Node" parent="." node_paths=PackedStringArray("state_target", "initial_state")]
 unique_name_in_owner = true
@@ -92,3 +91,5 @@ script = ExtResource("6_5jj8m")
 
 [node name="Fall" type="Node" parent="MovementState"]
 script = ExtResource("7_5a0et")
+
+[editable path="Pivot/MainCamera/SubViewportContainer/SubViewport/NoClipCamera/Container/blasterC2"]

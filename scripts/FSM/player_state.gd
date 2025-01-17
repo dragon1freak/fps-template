@@ -11,7 +11,6 @@ var player : PlayerClass
 
 
 func enter(new_target: Node) -> void:
-	print(self.name)
 	if new_target is PlayerClass:
 		player = new_target
 
@@ -53,7 +52,6 @@ func handle_mouse_look(event: InputEvent) -> void:
 		player.rotation_target.y -= event.relative.x / player.mouse_sensitivity / 100
 		player.rotation_target.x -= event.relative.y / player.mouse_sensitivity / 100
 		player.rotation_target.x = clamp(player.rotation_target.x, deg_to_rad(-90), deg_to_rad(90))
-		player.input_mouse = event.relative / player.mouse_sensitivity 
 
 
 ## Default damage function, simply subtracts the amount from the current health value
