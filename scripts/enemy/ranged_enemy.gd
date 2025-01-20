@@ -25,7 +25,7 @@ func _ready() -> void:
 func _handle_movement(_delta: float) -> void:
 	if current_target:
 		transform = interpolated_look_at(transform,  Vector3(player.position.x, 0.0, player.position.z), 0.3)
-		if global_position.distance_to(current_target.global_position) > weapon_range:
+		if global_position.distance_to(current_target.global_position) > weapon_config.max_range:
 			final_velocity = transform.basis.z * movement_speed
 			if not animation_player.get_queue().has("run") and animation_player.has_animation("run"):
 				animation_player.queue("run")
@@ -34,32 +34,32 @@ func _handle_movement(_delta: float) -> void:
 
 
 func _handle_attack(delta) -> void:
-	if can_attack and player and self.global_position.distance_to(player.global_position) <= weapon_range + range_buffer:
+	if can_attack and player and self.global_position.distance_to(player.global_position) <= weapon_config.max_range + range_buffer:
 		_attack(delta)
 
 
 func _attack(_delta) -> void:
 	if weapon_config.max_magazine_size > 0:
-		ammo_count -= 1
-		if ammo_count <= 0:
+		weapon_config.current_magazine -= 1
+		if weapon_config.current_magazine <= 0:
 			_reload()
 	if not can_attack_timer or can_attack_timer.time_left <= 0:
-		_set_attack_timer(rate_of_fire)
+		_set_attack_timer(weapon_config.fire_rate)
 
 	animation_player.play("attack")
 
 
 func _reload() -> void:
-	_set_attack_timer(reload_time)
+	_set_attack_timer(weapon_config.reload_time)
 	await can_attack_timer.timeout
-	ammo_count = weapon_config.max_magazine_size
+	weapon_config.current_magazine = weapon_config.max_magazine_size
 
 
 func fire() -> void:
 	if SHOOT_SOUND:
 		SHOOT_SOUND.play()
 	for i in weapon_config.shot_count:
-		var new_projectile = projectile.instantiate()
+		var new_projectile = weapon_config.projectile.instantiate()
 		get_parent().add_child(new_projectile)
 		
 		var direction = projectile_spawn.global_position.direction_to(player.global_position + Vector3(0, 0.5, 0)).normalized()

@@ -13,7 +13,7 @@ func _ready() -> void:
 
 
 func _handle_attack(delta) -> void:
-	if can_attack and player and self.global_position.distance_to(player.global_position) <= weapon_range:
+	if can_attack and player and self.global_position.distance_to(player.global_position) <= weapon_config.max_range:
 		_attack(delta)
 
 
@@ -32,7 +32,7 @@ func _attack(_delta: float) -> void:
 
 func _handle_movement(delta: float) -> void:
 	if not attacking:
-		if current_target and global_position.distance_to(current_target.global_position) > weapon_range:
+		if current_target and global_position.distance_to(current_target.global_position) > weapon_config.max_range:
 			animation_player.queue("Run")
 		super(delta)
 

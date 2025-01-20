@@ -2,12 +2,15 @@ extends Node
 class_name State
 
 
+var target : Node
+
+
 signal transitioned
 
 
 # called when entering the state
-func enter(_state_target: Node) -> void:
-	pass
+func enter(state_target: Node) -> void:
+	target = state_target
 
 
 # called when exiting the state
@@ -27,3 +30,7 @@ func physics_update(_delta: float):
 
 func input_update(_event) -> void:
 	pass
+
+
+func transition(target_state : String) -> void:
+	self.transitioned.emit(self, target_state)

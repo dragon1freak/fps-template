@@ -1,10 +1,11 @@
 extends RayCast3D
-
+## The raycast used to interact with things.  Can be disabled 
 
 signal can_interact_changed(can_interact)
 
 
 var can_interact := false
+var disabled := false
 
 
 func check_can_interact(target) -> bool:
@@ -22,8 +23,8 @@ func set_can_interact(value : bool) -> void:
 		can_interact_changed.emit(false)
 
 
-func _physics_process(delta):	
-	if not can_interact and not self.is_colliding():
+func _physics_process(delta):
+	if disabled or (not can_interact and not self.is_colliding()):
 		return
 	
 	var interactee = self.get_collider()
@@ -35,3 +36,7 @@ func _physics_process(delta):
 	
 	if Input.is_action_just_pressed("interact") and can_interact:
 		interactee.interact()
+
+
+func set_disabled(value : bool) -> void:
+	disabled = value

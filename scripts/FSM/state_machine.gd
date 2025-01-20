@@ -8,34 +8,42 @@ var states : Dictionary = {}
 var current_state : State
 
 
+var is_active := true
+
+
 func _ready():
-	for child in get_children():
-		if child is State:
-			states[child.name.to_lower()] = child
-			child.transitioned.connect(on_child_transition)
+	register_children()
 	
-	if initial_state:
+	if initial_state and is_active:
 		initial_state.enter(state_target)
 		current_state = initial_state
 
 
+func register_children() -> void:
+	states = {}
+	for child in get_children():
+		if child is State:
+			states[child.name.to_lower()] = child
+			child.transitioned.connect(on_child_transition)
+
+
 func _process(delta):
-	if current_state:
+	if is_active and current_state:
 		current_state.update(delta)
 
 
 func _physics_process(delta):
-	if current_state:
+	if is_active and current_state:
 		current_state.physics_update(delta)
 
 
 func _input(event):
-	if current_state:
+	if is_active and current_state:
 		current_state.input_update(event)
 
 
 func on_child_transition(state: State, new_state_name: String) -> void:
-	if state != current_state:
+	if state != current_state or not is_active:
 		return
 	
 	var new_state : State = states.get(new_state_name.to_lower())

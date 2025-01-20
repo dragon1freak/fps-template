@@ -1,8 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://clgbxao7515tt"]
+[gd_scene load_steps=21 format=3 uid="uid://clgbxao7515tt"]
 
 [ext_resource type="Script" path="res://scenes/player/player.gd" id="1_ah64t"]
 [ext_resource type="Script" path="res://scripts/stat_block.gd" id="2_46c7b"]
 [ext_resource type="Script" path="res://scripts/FSM/state_machine.gd" id="2_qhsxl"]
+[ext_resource type="Script" path="res://weapon.gd" id="2_w3ppi"]
+[ext_resource type="PackedScene" uid="uid://buc6h2h8ai5h4" path="res://blasterG.glb" id="4_co1wp"]
 [ext_resource type="Script" path="res://scenes/player/no_clip_camera.gd" id="4_hy8vk"]
 [ext_resource type="Script" path="res://scenes/player/states/idle.gd" id="4_sd7vf"]
 [ext_resource type="Script" path="res://scenes/player/interactor.gd" id="5_21qci"]
@@ -10,6 +12,46 @@
 [ext_resource type="Script" path="res://scenes/player/states/run.gd" id="5_rmbbx"]
 [ext_resource type="Script" path="res://scenes/player/states/jump.gd" id="6_5jj8m"]
 [ext_resource type="Script" path="res://scenes/player/states/fall.gd" id="7_5a0et"]
+[ext_resource type="Script" path="res://scenes/player/player_weapon_slot.gd" id="8_foj71"]
+[ext_resource type="Script" path="res://scenes/player/weapon_states/idle.gd" id="10_jwke7"]
+[ext_resource type="Script" path="res://scenes/player/weapon_states/shoot.gd" id="11_06pgs"]
+[ext_resource type="Script" path="res://scenes/player/weapon_states/reload.gd" id="12_x5o34"]
+
+[sub_resource type="Resource" id="Resource_p5il2"]
+script = ExtResource("2_w3ppi")
+model = ExtResource("5_g8ehu")
+position = Vector3(0.324, -0.264, -0.929)
+rotation = Vector3(0, 180, 0)
+muzzle_position = Vector3(0, 0, 0)
+muzzle_scale = Vector3(1, 1, 1)
+automatic = false
+fire_rate = 0.1
+max_magazine_size = 8
+reload_time = 0.5
+max_range = 100
+damage = 25.0
+spread = 0.0
+shot_count = 1
+knockback = 20
+kick = 0.2
+
+[sub_resource type="Resource" id="Resource_4adl4"]
+script = ExtResource("2_w3ppi")
+model = ExtResource("4_co1wp")
+position = Vector3(0.324, -0.264, -0.929)
+rotation = Vector3(0, 180, 0)
+muzzle_position = Vector3(0, 0, 0)
+muzzle_scale = Vector3(1, 1, 1)
+automatic = true
+fire_rate = 0.1
+max_magazine_size = 8
+reload_time = 0.5
+max_range = 100
+damage = 25.0
+spread = 0.0
+shot_count = 1
+knockback = 20
+kick = 0.2
 
 [sub_resource type="Resource" id="Resource_ytgok"]
 script = ExtResource("2_46c7b")
@@ -22,7 +64,10 @@ jump_strength = 8.0
 
 [node name="Player" type="CharacterBody3D" groups=["player"]]
 collision_layer = 16
+floor_stop_on_slope = false
+floor_constant_speed = true
 script = ExtResource("1_ah64t")
+weapons = Array[ExtResource("2_w3ppi")]([SubResource("Resource_p5il2"), SubResource("Resource_4adl4")])
 stat_block = SubResource("Resource_ytgok")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -40,9 +85,16 @@ hit_from_inside = true
 collide_with_areas = true
 script = ExtResource("5_21qci")
 
+[node name="ShotCast" type="RayCast3D" parent="Pivot"]
+target_position = Vector3(0, 0, -1.5)
+collision_mask = 9
+hit_from_inside = true
+collide_with_areas = true
+
 [node name="MainCamera" type="Camera3D" parent="Pivot"]
 unique_name_in_owner = true
 cull_mask = 1048573
+fov = 80.0
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="Pivot/MainCamera"]
 anchors_preset = 15
@@ -62,17 +114,46 @@ render_target_update_mode = 4
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
 cull_mask = 2
-fov = 40.0
+fov = 45.0
 script = ExtResource("4_hy8vk")
 
 [node name="Container" type="Node3D" parent="Pivot/MainCamera/SubViewportContainer/SubViewport/NoClipCamera"]
 unique_name_in_owner = true
 
-[node name="blasterC2" parent="Pivot/MainCamera/SubViewportContainer/SubViewport/NoClipCamera/Container" instance=ExtResource("5_g8ehu")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.324, -0.264, -0.929)
+[node name="RightHand" type="Node3D" parent="Pivot/MainCamera/SubViewportContainer/SubViewport/NoClipCamera/Container"]
+unique_name_in_owner = true
+script = ExtResource("8_foj71")
 
-[node name="blasterC" parent="Pivot/MainCamera/SubViewportContainer/SubViewport/NoClipCamera/Container/blasterC2" index="0"]
+[node name="ModelContainer" type="Node3D" parent="Pivot/MainCamera/SubViewportContainer/SubViewport/NoClipCamera/Container/RightHand"]
+unique_name_in_owner = true
+
+[node name="blasterC2" parent="Pivot/MainCamera/SubViewportContainer/SubViewport/NoClipCamera/Container/RightHand/ModelContainer" instance=ExtResource("5_g8ehu")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.324, -0.3, -0.929)
+
+[node name="blasterC" parent="Pivot/MainCamera/SubViewportContainer/SubViewport/NoClipCamera/Container/RightHand/ModelContainer/blasterC2" index="0"]
 layers = 2
+
+[node name="WeaponState" type="Node" parent="Pivot/MainCamera/SubViewportContainer/SubViewport/NoClipCamera/Container/RightHand" node_paths=PackedStringArray("state_target", "initial_state")]
+unique_name_in_owner = true
+script = ExtResource("2_qhsxl")
+state_target = NodePath("..")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="Pivot/MainCamera/SubViewportContainer/SubViewport/NoClipCamera/Container/RightHand/WeaponState"]
+script = ExtResource("10_jwke7")
+
+[node name="Shoot" type="Node" parent="Pivot/MainCamera/SubViewportContainer/SubViewport/NoClipCamera/Container/RightHand/WeaponState"]
+script = ExtResource("11_06pgs")
+
+[node name="Reload" type="Node" parent="Pivot/MainCamera/SubViewportContainer/SubViewport/NoClipCamera/Container/RightHand/WeaponState"]
+script = ExtResource("12_x5o34")
+
+[node name="ShotCast" type="RayCast3D" parent="Pivot/MainCamera/SubViewportContainer/SubViewport/NoClipCamera/Container/RightHand"]
+unique_name_in_owner = true
+target_position = Vector3(0, 0, -1.5)
+collision_mask = 9
+hit_from_inside = true
+collide_with_areas = true
 
 [node name="MovementState" type="Node" parent="." node_paths=PackedStringArray("state_target", "initial_state")]
 unique_name_in_owner = true
@@ -92,4 +173,29 @@ script = ExtResource("6_5jj8m")
 [node name="Fall" type="Node" parent="MovementState"]
 script = ExtResource("7_5a0et")
 
-[editable path="Pivot/MainCamera/SubViewportContainer/SubViewport/NoClipCamera/Container/blasterC2"]
+[node name="PlayerHUD" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="PlayerHUD"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Crosshair" type="TextureRect" parent="PlayerHUD/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(20, 20)
+
+[editable path="Pivot/MainCamera/SubViewportContainer/SubViewport/NoClipCamera/Container/RightHand/ModelContainer/blasterC2"]

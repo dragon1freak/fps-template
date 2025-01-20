@@ -1,5 +1,5 @@
 extends Resource
-class_name Weapon
+class_name WeaponConfig
 
 @export_subgroup("Model")
 @export var model: PackedScene  # Model of the weapon
@@ -9,29 +9,26 @@ class_name Weapon
 @export var muzzle_scale: Vector3 = Vector3(1, 1, 1)  # On-screen position of muzzle flash
 
 @export_subgroup("Properties")
-@export var stepped_reload := false
-@export_range(0.1, 1) var cooldown: float = 0.1  # Firerate
 @export var automatic := false
+@export_range(0.1, 1) var fire_rate: float = 0.1  # Firerate
 @export_range(1, 100) var max_magazine_size : int = 8 : 
 	set(value):
 		current_magazine = value
 		max_magazine_size = value
 @export_range(0.25, 4, 0.01) var reload_time := 0.5
-@export_range(1, 50) var max_distance: int = 100  # Fire distance
+@export_range(1, 50) var max_range: int = 100  # Fire distance
 @export_range(0, 100) var damage: float = 25  # Damage per hit
 @export_range(0, 30) var spread: float = 0  # Spread of each shot
 @export_range(1, 10) var shot_count: int = 1  # Amount of shots
 @export_range(0, 50) var knockback: int = 20  # Amount of knockback
 @export_range(0.0, 5.0, 0.1) var kick: float = 0.2  # Amount of kick on the model
 
-@export_subgroup("Sounds")
-@export var sound_shoot: AudioStream  # Sound path
-@export var reload_sound : AudioStream
-@export var reload_start_sound : AudioStream
-@export var reload_step_sound : AudioStream
-@export var reload_end_sound : AudioStream
-@export var post_shoot_sound : AudioStream
-
+@export_subgroup("Sounds", "sound_")
+@export var sound_shoot: AudioStream
+@export var sound_post_shoot : AudioStream
+@export var sound_reload_start : AudioStream
+@export var sound_reload_step : AudioStream
+@export var sound_reload_end : AudioStream
 
 @export_subgroup("Crosshair")
 @export var crosshair: Texture2D  # Image of crosshair on-screen
@@ -39,7 +36,6 @@ class_name Weapon
 @export_subgroup("Projectile")
 @export var projectile: PackedScene # The projectile scene
 @export var impact: PackedScene = null # Impact scene
-@export var generic_impact : PackedScene = null
 
 
 var current_magazine = 8

@@ -2,28 +2,13 @@ extends CharacterBody3D
 class_name BaseEnemy
 
 @export var stat_block : EnemyStatBlock
-@export var weapon_config : Weapon
+@export var weapon_config : WeaponConfig
 
 # Self properties
 @onready var health := stat_block.base_health
 @onready var movement_speed := stat_block.base_speed
 @onready var jump_strength := stat_block.base_jump_strength
 @onready var gravity_force := stat_block.base_gravity
-
-# Weapon properties
-@onready var rate_of_fire := weapon_config.cooldown
-@onready var weapon_range := weapon_config.max_distance
-@onready var weapon_damage := weapon_config.damage
-@onready var ammo_count := weapon_config.max_magazine_size
-@onready var reload_time := weapon_config.reload_time
-@onready var spread := weapon_config.spread
-@onready var shot_count := weapon_config.shot_count
-@onready var knockback := weapon_config.knockback
-
-@onready var shoot_sound : AudioStream = weapon_config.sound_shoot
-
-@onready var projectile : PackedScene = weapon_config.projectile
-@onready var impact_event : PackedScene = weapon_config.impact
 
 # Get the player and other relevant nodes
 @onready var player : PlayerClass = get_tree().get_first_node_in_group("player")
@@ -71,7 +56,7 @@ func _physics_process(delta) -> void:
 var acceleration := 0.0
 # override for movement
 func _handle_movement(_delta: float) -> void:
-	if current_target and global_position.distance_to(current_target.global_position) > weapon_range:
+	if current_target and global_position.distance_to(current_target.global_position) > weapon_config.max_range:
 		transform = interpolated_look_at(transform,  Vector3(player.position.x, 0.0, player.position.z), 0.3)
 		final_velocity = transform.basis.z * movement_speed
 	else:
@@ -92,7 +77,7 @@ func _handle_attack(delta: float) -> void:
 
 
 func _attack(_delta) -> void:
-	_set_attack_timer(rate_of_fire)
+	_set_attack_timer(weapon_config.fire_rate)
 
 
 # override for taking damage
