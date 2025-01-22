@@ -55,3 +55,18 @@ func on_child_transition(state: State, new_state_name: String) -> void:
 	
 	new_state.enter(state_target)
 	current_state = new_state
+
+
+func set_states(new_states : Dictionary) -> void:
+	current_state = null
+	for n in get_children():
+		self.remove_child(n)
+		n.queue_free()
+	
+	for key in new_states:
+		var new_state = Node.new()
+		new_state.name = key
+		new_state.set_script(new_states[key])
+		self.add_child(new_state)
+	register_children()
+	on_child_transition(null, new_states.keys()[0])

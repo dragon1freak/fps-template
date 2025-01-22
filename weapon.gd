@@ -1,6 +1,8 @@
 extends Resource
 class_name WeaponConfig
 
+@export var states : WeaponStateConfig 
+
 @export_subgroup("Model")
 @export var model: PackedScene  # Model of the weapon
 @export var position: Vector3  # On-screen position

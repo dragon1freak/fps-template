@@ -15,6 +15,10 @@ run/main_scene="res://scenes/test_gym/test_gym.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+Audio="*res://global/audio.gd"
+
 [input]
 
 strafe_left={

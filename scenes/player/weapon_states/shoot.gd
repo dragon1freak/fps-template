@@ -7,7 +7,9 @@ func enter(_t) -> void:
 
 
 func do_shoot() -> void:
-	print("bang")
+	# Play shoot sounds
+	if current_weapon.sound_shoot:
+		Audio.play(current_weapon.sound_shoot, "SFX")
 	current_weapon.current_magazine -= 1
 	await get_tree().create_timer(current_weapon.fire_rate).timeout
 	

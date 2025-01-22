@@ -1,31 +1,35 @@
-[gd_scene load_steps=21 format=3 uid="uid://clgbxao7515tt"]
+[gd_scene load_steps=24 format=3 uid="uid://clgbxao7515tt"]
 
 [ext_resource type="Script" path="res://scenes/player/player.gd" id="1_ah64t"]
 [ext_resource type="Script" path="res://scripts/stat_block.gd" id="2_46c7b"]
 [ext_resource type="Script" path="res://scripts/FSM/state_machine.gd" id="2_qhsxl"]
 [ext_resource type="Script" path="res://weapon.gd" id="2_w3ppi"]
-[ext_resource type="PackedScene" uid="uid://buc6h2h8ai5h4" path="res://blasterG.glb" id="4_co1wp"]
+[ext_resource type="AudioStream" uid="uid://de585amwg5iv6" path="res://sounds/weapons/laserLarge_000.ogg" id="4_h8r18"]
 [ext_resource type="Script" path="res://scenes/player/no_clip_camera.gd" id="4_hy8vk"]
+[ext_resource type="AudioStream" uid="uid://jxrcu45tsgfy" path="res://sounds/weapons/reload_end.ogg" id="4_m7y4k"]
 [ext_resource type="Script" path="res://scenes/player/states/idle.gd" id="4_sd7vf"]
 [ext_resource type="Script" path="res://scenes/player/interactor.gd" id="5_21qci"]
-[ext_resource type="PackedScene" uid="uid://bg2ujckow4hqh" path="res://blasterC.glb" id="5_g8ehu"]
+[ext_resource type="AudioStream" uid="uid://htllncfymegd" path="res://sounds/weapons/start_reload.ogg" id="5_5814m"]
+[ext_resource type="PackedScene" uid="uid://bg2ujckow4hqh" path="res://models/weapons/blasterC.glb" id="5_g8ehu"]
+[ext_resource type="Resource" uid="uid://cs1txkd3r1vuk" path="res://scenes/player/weapon_states/default_weapon_states.tres" id="5_hkjfa"]
+[ext_resource type="PackedScene" uid="uid://bn6y7j6nvhwr3" path="res://models/weapons/blasterD.glb" id="5_kmphp"]
 [ext_resource type="Script" path="res://scenes/player/states/run.gd" id="5_rmbbx"]
+[ext_resource type="AudioStream" uid="uid://dd56gjkdv8l37" path="res://sounds/weapons/laserSmall_001.ogg" id="6_03k2u"]
 [ext_resource type="Script" path="res://scenes/player/states/jump.gd" id="6_5jj8m"]
+[ext_resource type="AudioStream" uid="uid://dndwxtat4p4wo" path="res://sounds/weapons/reload_step.ogg" id="6_oetyi"]
 [ext_resource type="Script" path="res://scenes/player/states/fall.gd" id="7_5a0et"]
 [ext_resource type="Script" path="res://scenes/player/player_weapon_slot.gd" id="8_foj71"]
-[ext_resource type="Script" path="res://scenes/player/weapon_states/idle.gd" id="10_jwke7"]
-[ext_resource type="Script" path="res://scenes/player/weapon_states/shoot.gd" id="11_06pgs"]
-[ext_resource type="Script" path="res://scenes/player/weapon_states/reload.gd" id="12_x5o34"]
 
 [sub_resource type="Resource" id="Resource_p5il2"]
 script = ExtResource("2_w3ppi")
+states = ExtResource("5_hkjfa")
 model = ExtResource("5_g8ehu")
 position = Vector3(0.324, -0.264, -0.929)
 rotation = Vector3(0, 180, 0)
 muzzle_position = Vector3(0, 0, 0)
 muzzle_scale = Vector3(1, 1, 1)
 automatic = false
-fire_rate = 0.1
+fire_rate = 0.3
 max_magazine_size = 8
 reload_time = 0.5
 max_range = 100
@@ -34,17 +38,22 @@ spread = 0.0
 shot_count = 1
 knockback = 20
 kick = 0.2
+sound_shoot = ExtResource("4_h8r18")
+sound_reload_start = ExtResource("5_5814m")
+sound_reload_step = ExtResource("6_oetyi")
+sound_reload_end = ExtResource("4_m7y4k")
 
 [sub_resource type="Resource" id="Resource_4adl4"]
 script = ExtResource("2_w3ppi")
-model = ExtResource("4_co1wp")
+states = ExtResource("5_hkjfa")
+model = ExtResource("5_kmphp")
 position = Vector3(0.324, -0.264, -0.929)
 rotation = Vector3(0, 180, 0)
 muzzle_position = Vector3(0, 0, 0)
 muzzle_scale = Vector3(1, 1, 1)
 automatic = true
-fire_rate = 0.1
-max_magazine_size = 8
+fire_rate = 0.15
+max_magazine_size = 16
 reload_time = 0.5
 max_range = 100
 damage = 25.0
@@ -52,6 +61,10 @@ spread = 0.0
 shot_count = 1
 knockback = 20
 kick = 0.2
+sound_shoot = ExtResource("6_03k2u")
+sound_reload_start = ExtResource("5_5814m")
+sound_reload_step = ExtResource("6_oetyi")
+sound_reload_end = ExtResource("4_m7y4k")
 
 [sub_resource type="Resource" id="Resource_ytgok"]
 script = ExtResource("2_46c7b")
@@ -133,20 +146,10 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.324,
 [node name="blasterC" parent="Pivot/MainCamera/SubViewportContainer/SubViewport/NoClipCamera/Container/RightHand/ModelContainer/blasterC2" index="0"]
 layers = 2
 
-[node name="WeaponState" type="Node" parent="Pivot/MainCamera/SubViewportContainer/SubViewport/NoClipCamera/Container/RightHand" node_paths=PackedStringArray("state_target", "initial_state")]
+[node name="WeaponState" type="Node" parent="Pivot/MainCamera/SubViewportContainer/SubViewport/NoClipCamera/Container/RightHand" node_paths=PackedStringArray("state_target")]
 unique_name_in_owner = true
 script = ExtResource("2_qhsxl")
 state_target = NodePath("..")
-initial_state = NodePath("Idle")
-
-[node name="Idle" type="Node" parent="Pivot/MainCamera/SubViewportContainer/SubViewport/NoClipCamera/Container/RightHand/WeaponState"]
-script = ExtResource("10_jwke7")
-
-[node name="Shoot" type="Node" parent="Pivot/MainCamera/SubViewportContainer/SubViewport/NoClipCamera/Container/RightHand/WeaponState"]
-script = ExtResource("11_06pgs")
-
-[node name="Reload" type="Node" parent="Pivot/MainCamera/SubViewportContainer/SubViewport/NoClipCamera/Container/RightHand/WeaponState"]
-script = ExtResource("12_x5o34")
 
 [node name="ShotCast" type="RayCast3D" parent="Pivot/MainCamera/SubViewportContainer/SubViewport/NoClipCamera/Container/RightHand"]
 unique_name_in_owner = true
@@ -154,6 +157,8 @@ target_position = Vector3(0, 0, -1.5)
 collision_mask = 9
 hit_from_inside = true
 collide_with_areas = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Pivot/MainCamera/SubViewportContainer/SubViewport/NoClipCamera/Container/RightHand"]
 
 [node name="MovementState" type="Node" parent="." node_paths=PackedStringArray("state_target", "initial_state")]
 unique_name_in_owner = true

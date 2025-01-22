@@ -5,7 +5,6 @@ class_name NPCState
 @export var state_target : Node
 
 
-var target : CharacterBody3D
 var player: CharacterBody3D
 
 

@@ -78,6 +78,8 @@ func kill() -> void:
 
 var tween : Tween
 func initiate_change_weapon(index):
+	right_hand.set_is_shooting(false)
+
 	weapon_index = index
 	
 	tween = get_tree().create_tween()

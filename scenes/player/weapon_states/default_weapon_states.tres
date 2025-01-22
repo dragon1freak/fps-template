@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="WeaponStateConfig" load_steps=5 format=3 uid="uid://cs1txkd3r1vuk"]
+
+[ext_resource type="Script" path="res://weapon_state_config.gd" id="1_20by6"]
+[ext_resource type="Script" path="res://scenes/player/weapon_states/idle.gd" id="2_x0gu2"]
+[ext_resource type="Script" path="res://scenes/player/weapon_states/shoot.gd" id="3_p523y"]
+[ext_resource type="Script" path="res://scenes/player/weapon_states/reload.gd" id="4_ih12h"]
+
+[resource]
+script = ExtResource("1_20by6")
+states = {
+"Idle": ExtResource("2_x0gu2"),
+"Reload": ExtResource("4_ih12h"),
+"Shoot": ExtResource("3_p523y")
+}
