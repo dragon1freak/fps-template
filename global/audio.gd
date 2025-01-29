@@ -52,7 +52,7 @@ func _process(_delta) -> void:
 		elif next.stream is AudioStream:
 			next_player.stream = next.stream
 		
-		if next_player.bus != next.bus:
+		if next_player.bus != next.bus and AudioServer.get_bus_index(next.bus) > 0:
 			next_player.bus = next.bus
 		next_player.volume_db = next.volume
 		next_player.play()

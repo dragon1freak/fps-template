@@ -60,7 +60,7 @@ func _physics_process(delta):
 	if rotation_target:
 		pivot.rotation.x = lerp_angle(pivot.rotation.x, rotation_target.x, delta * 25) # Rotate camera pivot up and down
 		rotation.y = lerp_angle(rotation.y, rotation_target.y, delta * 25) # Rotate player left and right
-		main_camera.rotation.z = lerp_angle(main_camera.rotation.z, clamp(rotation_target.y - previous_rotation, -0.15, 0.15) * 25 * delta, delta * 5) # Slight camera tilt based on rotation speed
+		main_camera.rotation.z = lerp_angle(main_camera.rotation.z, clamp(rotation_target.y - previous_rotation, -0.15, 0.15) * 25 * delta, delta * 10) # Slight camera tilt based on rotation speed
 		previous_rotation = rotation_target.y
 	
 	container.position = lerp(container.position, (basis.inverse() * -velocity / 50).clampf(-0.05, 0.05), delta * 5) # Moves the weapon container around during movement
