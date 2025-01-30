@@ -4,6 +4,7 @@ extends PlayerState
 func enter(_p) -> void:
 	super(_p)
 	apply_jump(player.current_stats.jump_strength)
+	Audio.play(player.sound_jump, "SFX")
 
 
 func physics_update(delta: float) -> void:
@@ -13,7 +14,7 @@ func physics_update(delta: float) -> void:
 	handle_movement()
 	handle_gravity(delta)
 	
-	if player.velocity.y < 0:
+	if player.velocity.y < 0 or player.is_on_floor():
 		transition("Fall")
 	
 	if Input.get_action_strength("jump") == 0.0 and player.velocity.y > 0:

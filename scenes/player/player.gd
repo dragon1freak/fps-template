@@ -21,6 +21,15 @@ class_name PlayerClass
 @export_range(0, 1.0) var jump_buffer : float = 0.1
 @export_group("")
 
+@export_group("Sounds", "sound_")
+## Sound played by the Run state for footsteps
+@export var sound_footstep : AudioStream = preload("res://sounds/player/footstep.ogg")
+## Sound played by the Jump state for jumping
+@export var sound_jump : AudioStream = preload("res://sounds/player/jump.ogg")
+## Sound played by the Fall state when landing
+@export var sound_land : AudioStream = preload("res://sounds/player/land.ogg")
+@export_group("")
+
 
 @onready var pivot = $Pivot
 @onready var movement_state: StateMachine = $MovementState

@@ -23,6 +23,7 @@ func physics_update(delta: float) -> void:
 		buffer_jump()
 	
 	if player.is_on_floor():
+		Audio.play(player.sound_land, "SFX", 0)
 		if should_jump:
 			transition("Jump")
 		elif player.velocity == Vector3.ZERO:
