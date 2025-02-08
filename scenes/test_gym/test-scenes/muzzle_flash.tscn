@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3 uid="uid://ds1ilkh16veuw"]
+
+[ext_resource type="Texture2D" uid="uid://dcx2661vl4r6v" path="res://scenes/test_gym/test-sprites/muzzle-flash/explosion3.png" id="1_3rq7t"]
+[ext_resource type="Texture2D" uid="uid://bts0edlxvga7j" path="res://scenes/test_gym/test-sprites/muzzle-flash/explosion2.png" id="2_0euug"]
+[ext_resource type="Texture2D" uid="uid://b4fpw2xh7obsf" path="res://scenes/test_gym/test-sprites/muzzle-flash/explosion4.png" id="3_4vvrv"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_xrnaj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_3rq7t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_0euug")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_4vvrv")
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": false,
+"name": &"fire",
+"speed": 24.0
+}]
+
+[node name="MuzzleFlash" type="AnimatedSprite3D"]
+layers = 2
+modulate = Color(1, 1, 1, 0.866667)
+alpha_cut = 2
+alpha_scissor_threshold = 0.934
+texture_filter = 0
+sprite_frames = SubResource("SpriteFrames_xrnaj")
+animation = &"fire"
+frame = 3

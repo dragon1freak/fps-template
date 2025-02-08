@@ -1,0 +1,56 @@
+[gd_scene load_steps=8 format=3 uid="uid://dkea4nmyq7i2g"]
+
+[ext_resource type="Script" path="res://scenes/test_gym/test-scenes/basic_impact.gd" id="1_82asn"]
+
+[sub_resource type="Gradient" id="Gradient_7003t"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.219753, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_8a2n7"]
+gradient = SubResource("Gradient_7003t")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.679487, 0.346154)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_untvl"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = SubResource("GradientTexture2D_8a2n7")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_xy15b"]
+material = SubResource("StandardMaterial3D_untvl")
+
+[sub_resource type="Curve" id="Curve_v4pk1"]
+_data = [Vector2(0, 1), 0.0, 0.0918092, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_7c20q"]
+min_value = -1.0
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="BasicImpact" type="CPUParticles3D"]
+emitting = false
+amount = 16
+lifetime = 0.25
+one_shot = true
+explosiveness = 1.0
+mesh = SubResource("QuadMesh_xy15b")
+direction = Vector3(0, 0, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_max = 2.0
+scale_amount_min = 0.5
+scale_amount_curve = SubResource("Curve_v4pk1")
+color = Color(1, 0.820167, 0.17, 1)
+hue_variation_min = -0.08
+hue_variation_max = 0.08
+hue_variation_curve = SubResource("Curve_7c20q")
+script = ExtResource("1_82asn")

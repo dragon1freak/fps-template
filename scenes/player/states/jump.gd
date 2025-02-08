@@ -14,6 +14,7 @@ func physics_update(delta: float) -> void:
 	handle_movement()
 	handle_gravity(delta)
 	
+	# Transitioning to the Fall state instead of straight to the Idle state allows for handling landing
 	if player.velocity.y < 0 or player.is_on_floor():
 		transition("Fall")
 	

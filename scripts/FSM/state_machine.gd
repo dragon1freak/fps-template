@@ -18,7 +18,6 @@ func _ready():
 		initial_state.enter(state_target)
 		current_state = initial_state
 
-
 func register_children() -> void:
 	states = {}
 	for child in get_children():
@@ -43,7 +42,7 @@ func _input(event):
 
 
 func on_child_transition(state: State, new_state_name: String) -> void:
-	if state != current_state or not is_active:
+	if state != current_state:
 		return
 	
 	var new_state : State = states.get(new_state_name.to_lower())
@@ -70,3 +69,10 @@ func set_states(new_states : Dictionary) -> void:
 		self.add_child(new_state)
 	register_children()
 	on_child_transition(null, new_states.keys()[0])
+
+
+func reset_state() -> void:
+	if initial_state:
+		on_child_transition(current_state, initial_state.name)
+	else:
+		on_child_transition(current_state, states.keys()[0])

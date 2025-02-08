@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://m5pnwknim7gy"]
+
+[ext_resource type="PackedScene" uid="uid://dhfxklhfsunb1" path="res://scenes/test_gym/test-models/target_wall_large_A.gltf" id="1_1xr04"]
+[ext_resource type="Script" path="res://scenes/test_gym/test-scenes/firing_target.gd" id="1_dimsg"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3df8l"]
+size = Vector3(1.99634, 1.98462, 0.198242)
+
+[node name="FiringTarget" type="StaticBody3D"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.9, 3, 0)
+script = ExtResource("1_dimsg")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_3df8l")
+
+[node name="target_wall_large_A2" parent="." instance=ExtResource("1_1xr04")]
+
+[node name="DamageLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00270969, 1.38823, 0)
+billboard = 1
+no_depth_test = true
+text = "25"
+font_size = 116

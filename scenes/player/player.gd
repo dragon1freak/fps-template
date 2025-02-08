@@ -36,27 +36,26 @@ class_name PlayerClass
 @onready var interactor: RayCast3D = %Interactor
 @onready var main_camera: Camera3D = %MainCamera
 @onready var container: Node3D = %Container
-@onready var shot_cast: RayCast3D = %ShotCast
-@onready var crosshair: TextureRect = $PlayerHUD/Control/Crosshair
+@onready var crosshair: TextureRect = %Crosshair
 @onready var right_hand: WeaponSlot = %RightHand
 
 
-var rotation_target : Vector3
-var previous_rotation : float = 0.0 # Stores the last frames rotation_target.y to determine the amount of tilt
+var rotation_target : Vector3 # Rotation target for the player and the main camera
+var previous_velocity := Vector3.ZERO # Stores the previous frames velocity
 
 var weapon_index := 0
-var current_weapon 
+var current_weapon
 
 var can_shoot := true
 
 
 func _ready() -> void:
-	initiate_change_weapon(0)
+	change_weapon(0)
 
 
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("switch_weapon"):
-		initiate_change_weapon(wrap(weapon_index + 1, 0, weapons.size()))
+		change_weapon(wrap(weapon_index + 1, 0, weapons.size()))
 	
 	if can_shoot and Input.is_action_just_pressed("shoot"):
 		right_hand.set_is_shooting(true)
@@ -69,38 +68,44 @@ func _physics_process(delta):
 	if rotation_target:
 		pivot.rotation.x = lerp_angle(pivot.rotation.x, rotation_target.x, delta * 25) # Rotate camera pivot up and down
 		rotation.y = lerp_angle(rotation.y, rotation_target.y, delta * 25) # Rotate player left and right
-		main_camera.rotation.z = lerp_angle(main_camera.rotation.z, clamp(rotation_target.y - previous_rotation, -0.15, 0.15) * 25 * delta, delta * 10) # Slight camera tilt based on rotation speed
-		previous_rotation = rotation_target.y
 	
-	container.position = lerp(container.position, (basis.inverse() * -velocity / 50).clampf(-0.05, 0.05), delta * 5) # Moves the weapon container around during movement
+	main_camera.position.y = lerp(main_camera.position.y, 0.0, delta * 5)
+	
+	# Slight camera movement when landing
+	if is_on_floor() and previous_velocity.y != 0:
+		main_camera.position.y = -0.1
+	
+	previous_velocity = velocity
 	move_and_slide()
 
 
+## Pass damage taken on to the current movement state.  We do this
+## so we can handle damage per state, allowing for movements like dashes
+## or such to handle damage differently
 func damage(amount: int, dealer) -> void:
 	if movement_state.current_state.has_method("handle_damage"):
 		movement_state.current_state.handle_damage(amount, dealer)
 
 
+## Called when the player is dead, typically called by the current movement state if
+## health is at or below 0
 func kill() -> void:
 	print("dead")
 
 
-var tween : Tween
-func initiate_change_weapon(index):
+## Switches the current weapon based on the passed index
+func change_weapon(index : int):
+	can_shoot = false
 	right_hand.set_is_shooting(false)
-
+	
 	weapon_index = index
-	
-	tween = get_tree().create_tween()
-	tween.set_ease(Tween.EASE_OUT_IN)
-	tween.tween_property(container, "position", container.position + Vector3(0, -0.5, 0), 0.1)
-	tween.tween_callback(change_weapon) # Changes the model
-
-
-# Switches the weapon model (off-screen)
-func change_weapon():
 	current_weapon = weapons[weapon_index]
-	
-	right_hand.set_weapon(current_weapon)
+		
+	# Wait for the weapon slot to change the weapon
+	await right_hand.set_weapon(current_weapon)
 	
 	crosshair.texture = current_weapon.crosshair
+	
+	can_shoot = true
+	if can_shoot and Input.is_action_pressed("shoot"):
+		right_hand.set_is_shooting(true)

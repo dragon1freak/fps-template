@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://bgnmn60vsv4fi"]
+
+[ext_resource type="PackedScene" uid="uid://cbrkg2m8mfnj4" path="res://scenes/test_gym/test-models/test_gym.glb" id="1_rqno6"]
+[ext_resource type="PackedScene" uid="uid://m5pnwknim7gy" path="res://scenes/test_gym/test-scenes/firing_target.tscn" id="2_2kl3r"]
+
+[node name="test_gym" instance=ExtResource("1_rqno6")]
+
+[node name="FiringTarget" parent="Target_2m" index="1" instance=ExtResource("2_2kl3r")]
+
+[node name="FiringTarget" parent="Target_5m" index="1" instance=ExtResource("2_2kl3r")]
+
+[node name="FiringTarget" parent="Target_10m" index="1" instance=ExtResource("2_2kl3r")]
+
+[node name="FiringTarget" parent="Target_15m" index="1" instance=ExtResource("2_2kl3r")]
+
+[node name="FiringTarget" parent="Target_20m" index="1" instance=ExtResource("2_2kl3r")]
+
+[node name="FiringTarget" parent="Target_30m" index="1" instance=ExtResource("2_2kl3r")]

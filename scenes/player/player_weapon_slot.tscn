@@ -1,0 +1,33 @@
+[gd_scene load_steps=4 format=3 uid="uid://5v2xd48nuiom"]
+
+[ext_resource type="Script" path="res://scenes/player/player_weapon_slot.gd" id="1_4x1rf"]
+[ext_resource type="PackedScene" uid="uid://bg2ujckow4hqh" path="res://scenes/test_gym/test-models/weapons/blasterC.glb" id="2_5mx2r"]
+[ext_resource type="Script" path="res://scripts/FSM/state_machine.gd" id="3_cdyr3"]
+
+[node name="PlayerWeaponSlot" type="Node3D"]
+script = ExtResource("1_4x1rf")
+
+[node name="ModelContainer" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="blasterC2" parent="ModelContainer" instance=ExtResource("2_5mx2r")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.324, -0.3, -0.929)
+
+[node name="blasterC" parent="ModelContainer/blasterC2" index="0"]
+layers = 2
+
+[node name="WeaponState" type="Node" parent="." node_paths=PackedStringArray("state_target")]
+unique_name_in_owner = true
+script = ExtResource("3_cdyr3")
+state_target = NodePath("..")
+
+[node name="ShotCast" type="RayCast3D" parent="."]
+unique_name_in_owner = true
+target_position = Vector3(0, 0, -1.5)
+collision_mask = 9
+hit_from_inside = true
+collide_with_areas = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[editable path="ModelContainer/blasterC2"]
