@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://m5pnwknim7gy"]
 
 [ext_resource type="PackedScene" uid="uid://dhfxklhfsunb1" path="res://scenes/test_gym/test-models/target_wall_large_A.gltf" id="1_1xr04"]
-[ext_resource type="Script" path="res://scenes/test_gym/test-scenes/firing_target.gd" id="1_dimsg"]
+[ext_resource type="Script" uid="uid://d1ti4yy6vwfd4" path="res://scenes/test_gym/test-scenes/firing_target.gd" id="1_dimsg"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_3df8l"]
 size = Vector3(1.99634, 1.98462, 0.198242)

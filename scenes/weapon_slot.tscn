@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://cjd7umocrh6m7"]
 
-[ext_resource type="Script" path="res://scenes/weapon_slot.gd" id="1_elaqd"]
+[ext_resource type="Script" uid="uid://ddsv1dyk6d2qo" path="res://scenes/weapon_slot.gd" id="1_elaqd"]
 [ext_resource type="PackedScene" uid="uid://bg2ujckow4hqh" path="res://scenes/test_gym/test-models/weapons/blasterC.glb" id="2_yssnf"]
-[ext_resource type="Script" path="res://scripts/FSM/state_machine.gd" id="3_ris4c"]
+[ext_resource type="Script" uid="uid://d1lbkm33abonk" path="res://scripts/FSM/state_machine.gd" id="3_ris4c"]
 
 [node name="WeaponSlot" type="Node3D"]
 script = ExtResource("1_elaqd")

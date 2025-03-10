@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://dkea4nmyq7i2g"]
 
-[ext_resource type="Script" path="res://scenes/test_gym/test-scenes/basic_impact.gd" id="1_82asn"]
+[ext_resource type="Script" uid="uid://ypjnwts4tofu" path="res://scenes/test_gym/test-scenes/basic_impact.gd" id="1_82asn"]
 
 [sub_resource type="Gradient" id="Gradient_7003t"]
 interpolation_mode = 1
@@ -32,7 +32,7 @@ _data = [Vector2(0, 1), 0.0, 0.0918092, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="Curve" id="Curve_7c20q"]
-min_value = -1.0
+_limits = [-1.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 2
 
